@@ -35,28 +35,24 @@
                 <form v-on:submit.prevent>
                   <div class="input-group mb-3">
                     <div class="input-group-append">
-                      <v-icon color="#A9DFBF" style="margin: 0 7px; font-size: 30px">fas fa-user</v-icon>
+                      <v-icon color="#057E28" style="margin: 0 7px; font-size: 30px">fas fa-user</v-icon>
                     </div>
                     <input v-model.number="paquete.cedula" type="number" name="" class="form-control input_user"
                       placeholder="Username" />
                   </div>
                   <div class="input-group mb-2">
                     <div class="input-group-append">
-                      <v-icon color="#A9DFBF" style="margin: 0 7px; font-size: 30px">fas fa-key</v-icon>
+                      <v-icon color="#057E28" style="margin: 0 7px; font-size: 30px">fas fa-key</v-icon>
                     </div>
                     <input v-model="paquete.contrasena" type="password" name="" class="form-control input_pass"
                       placeholder="Password" />
                   </div>
                   <div class="d-flex justify-content-center mt-3 login_container" v-if="prueba == 0">
-                    <vs-button color="#A9DFBF" @click="login">Iniciar Sesión</vs-button>
-
-
+                    <vs-button color="#057E28" @click="login">Iniciar Sesión</vs-button>
+                    <vs-button color="#057E28" @click="dialog = false">Cancelar</vs-button>
                   </div>
-
-
                 </form>
               </div>
-
               <div class="mt-4">
                 <div class="d-flex justify-content-center links">
                   <a href="#" style="color: black">¿olvidaste tu contraseña?</a>
@@ -66,6 +62,19 @@
           </div>
         </div>
       </v-dialog>
+      <!-- Diálogo para usuario no registrado -->
+      <v-dialog v-model="unregisteredDialog" max-width="350" persistent>
+  <v-card class="custom-card">
+    <v-card-title class="headline">Usuario no registrado</v-card-title>
+    <v-card-text>
+      Por favor verifica tus credenciales e intenta nuevamente.
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="#057E28" text @click="unregisteredDialog = false">Cerrar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
     </v-main>
     <v-container>
       <br />
@@ -150,55 +159,53 @@
     <v-row style="margin-top: 40px"></v-row>
   
     <div>
-    <v-footer
-    color="green"
-     class="footer text-center text-lg-start bg-light text-muted">
-      <v-container fluid>
-        <v-row align="center">
-          <v-col cols="12" sm="6" md="9">
-            <v-row>
-              <v-col cols="12" md="4" class="mt-4">
-                <v-row style="margin-top: 6px"></v-row>
-                <v-img src="../assets/logos/fondo1.png" max-height="130" max-width="250" />
-                <p style="color:black;">
-                  El SBSENA. Está conformado por el Equipo de
-                  Gestión, quienes tienen a su cargo la formulación y gestión de
-                  proyectos, la implementación y sostenibilidad del Proyecto
-                  Biblioteca Digital
-                </p>
-              </v-col>
-              <v-col cols="12" md="4" class="mt-4">
-                <h4 class="mb-2">
-                  Contacto
-                </h4>
-                <p><i class="fas fa-home me-3"></i> Calle 24 con, Cra. 14, Montería, Córdoba</p>
-                <p>
-                  <i class="fas fa-envelope me-3"></i>
-                  info@example.com
-                </p>
-                <p><i class="fas fa-phone me-3"></i> (94) 7838050</p>
-              </v-col>
-              <v-col cols="12" md="4" class="mt-4">
-                <div style="font-family: Times, 'Times New Roman', serif">
-                  <h4 class="mb-2 titulo-redes">Redes sociales</h4>
-                </div>
-                <br>
-
-                <div>
-                  <v-row align="center" justify="center">
-                    <v-icon color="#21618C" class="icono-redes">fab fa-facebook-f</v-icon>
-                    <v-icon color="#85C1E9" class="icono-redes">fab fa-twitter</v-icon>
-                    <v-icon color="#27AE60" class="icono-redes">fab fa-whatsapp</v-icon>
-                    <v-icon color="#D2B4DE" class="icono-redes">fab fa-instagram</v-icon>
-                  </v-row>
-                </div>
-              </v-col>
+      <v-footer color="green" class="footer text-center text-lg-start bg-custom text-muted">
+    <v-container fluid>
+      <v-row align="center">
+        <!-- Primera sección -->
+        <v-col cols="4" sm="4" md="4" class="mt-5 border-right">
+          <v-row style="margin-top: 6px">
+          </v-row>
+          <v-img src="../assets/logos/fondo1.png" max-height="130" max-width="250" />
+          <p style="color:black;">
+            El SBSENA. Está conformado por el Equipo de Gestión, quienes tienen a su cargo la formulación y gestión de proyectos, la implementación y sostenibilidad del Proyecto Biblioteca Digital
+          </p>
+        </v-col>
+        
+        <!-- Segunda sección -->
+        <v-col cols="4" sm="4" md="4" class="mt-5 border-right">
+          <h4 class="mb-2 text-dark">
+    Contacto
+</h4>
+          <p class="text-dark"><i class="fas fa-home me-3"></i> Calle 24 con, Cra. 14, Montería, Córdoba</p>
+          <p class="text-dark">
+            <i class="fas fa-envelope me-3"></i>
+            info@example.com
+          </p>
+          <p class="text-dark"><i class="fas fa-phone me-3"></i> (94) 7838050</p>
+        </v-col>
+        
+        <!-- Tercera sección -->
+        <v-col cols="4" sm="4" md="4" class="mt-4">
+          <div style="font-family: Times, 'Times New Roman', serif">
+            <h4 class="mb-2 titulo-redes">Redes sociales</h4>
+          </div>
+          <br>
+          <div>
+            <v-row align="center" justify="center">
+              <v-icon color="#21618C" class="icono-redes">fab fa-facebook-f</v-icon>
+              <v-icon color="#85C1E9" class="icono-redes">fab fa-twitter</v-icon>
+              <v-icon color="#2ECC71" class="icono-redes">fab fa-whatsapp</v-icon>
+              <v-icon color="#D2B4DE" class="icono-redes">fab fa-instagram</v-icon>
             </v-row>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-footer>
-  </div>
+          </div>
+        </v-col>
+        
+      </v-row>
+    </v-container>
+  </v-footer>
+</div>
+
   </v-app>
 </template>
 <script>
@@ -211,6 +218,7 @@ export default {
 
     active: "home",
     dialog: false,
+    unregisteredDialog: false,
     noti: null,
 
     error: false,
@@ -272,33 +280,27 @@ export default {
   methods: {
 
     async login() {
-      var vm = this;
-
-      axios
-        .post("http://localhost:3000/auth/login", vm.paquete)
-        .then(function (response) {
-          console.log(response);
-          if (response.data != "") {
-            vm.$store.commit('setUser', response.data);
-            vm.$router.push("dashboard/welcome");
-          } else {
-            alert("usuario no resgistrado");
-          }
-
-
-        })
-        .catch(function (error) {
-          alert(error);
-          console.log(error);
-        })
-        .finally(function () {
-          vm.$refs.form.reset();
-        });
+  try {
+    const response = await axios.post("http://localhost:3000/auth/login", this.paquete);
+    if (response.data !== "") {
+      this.$store.commit('setUser', response.data);
+      this.$router.push("dashboard/welcome");
+    } else {
+      this.unregisteredDialog = true;
     }
-
-  },
-
-};
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      this.unregisteredDialog = true;
+    } else {
+      console.error("Error en la solicitud:", error);
+      this.error = true;
+      this.msg = "Error al intentar iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
+    }
+  } finally {
+    this.$refs.form.reset();
+  }
+}
+  }}
 </script>
 
 <style scoped>
@@ -333,10 +335,24 @@ export default {
 }
 
 footer{
-background-color: #2ECC71;
-color:black;
+background-color: #057E28;
+    border: 2px solid black; 
+    padding: 20px; 
 }
 
+.custom-card {
+  border: 2px solid #057E28; 
+  border-radius: 10px; 
+  box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.2); 
+}
+
+.custom-card .headline {
+  color: #057E28; 
+}
+
+.custom-card .v-btn {
+  color: #057E28; 
+}
 
 .logo {
   margin-top: 25px;

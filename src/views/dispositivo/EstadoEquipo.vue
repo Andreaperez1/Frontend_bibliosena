@@ -56,6 +56,18 @@
         </v-dialog>
         </div>
     </v-card>
+   <v-dialog v-model="dialogoExito" max-width="400">
+  <v-card>
+    <v-card-title class="headline">Estado Equipo Guardado</v-card-title>
+    <v-card-text>
+      Estado del equipo guardado con éxito.
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="success" text @click="dialogoExito = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
     </v-row>
    
 </template>
@@ -65,6 +77,7 @@ import axios from "axios";
 export default {
     data: () => ({
         dialogoEditar: false,
+        dialogoExito: false,
         valid: true,
 
         campoRules: [(v) => !!v || "Campo Requerido"],
@@ -92,27 +105,25 @@ export default {
     }),
 
     methods: {
-        guardar() {
-            var vm = this;
-            if (this.$refs.form.validate()) {
-                axios
-                    .post(" http://localhost:3000/estado-equipo/crear", this.paquete)
-                    .then(function (response) {
-
-                        alert("guardado");
-                        console.log(response)
-                        vm.cargar()
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    })
-                    .finally(function () {
-                        vm.$refs.form.reset();
-                    });
-            }
-
-        },
+    guardar() {
+        var vm = this;
+        if (this.$refs.form.validate()) {
+            axios
+                .post("http://localhost:3000/tipo-equipo/crear", this.paquete)
+                .then(function (response) {
+                    vm.dialogoExito = true; // Mostrar diálogo de éxito
+                    console.log(response);
+                    vm.cargar();
+                })
+                .catch(function (error) {
+                    // Manejar errores aquí
+                    console.log(error);
+                })
+                .finally(function () {
+                    vm.$refs.form.reset();
+                });
+        }
+    },
         async cargar() {
             var vm = this
             await axios
@@ -144,14 +155,12 @@ export default {
 
             },
                         
-         async deleteItem(id) {
-            alert(id);
-            await axios.delete('http://localhost:3000/estado-equipo/' + id).then(response => {
-                console.log(response.data);
-                this.cargar();
-            
-            })
-        },
+            async deleteItem(id) {
+        await axios.delete('http://localhost:3000/estado-equipo/' + id).then(response => {
+            console.log(response.data);
+            this.cargar();
+        })
+    },
         async editarEstado() {
             try {
                 await axios.put('http://localhost:3000/estado-equipo/actualizar',this.paqueteEditar).then(() => {
@@ -205,8 +214,20 @@ export default {
 .card{
     width:50%;
     height: 35%;
+    border-radius: 10px; 
+  box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.2); 
     
 }
+.custom-card .headline {
+  color: #057E28; 
+}
 
+.v-card__text {
+  color: #333; 
+}
+
+.v-card__actions .v-btn.success {
+  background-color: transparent; 
+}
 </style>
   

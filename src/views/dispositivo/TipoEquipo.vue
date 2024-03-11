@@ -61,6 +61,18 @@
         </v-card>
         </v-dialog>
     </div>
+    <!-- Diálogo de éxito -->
+    <v-dialog v-model="dialogoExito" max-width="400">
+        <v-card>
+          <v-card-title class="headline">Tipo Equipo Guardado</v-card-title>
+          <v-card-text>
+            La operación se completó con éxito.
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="success" text @click="dialogoExito = false">Aceptar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
     </v-row> 
    
@@ -105,7 +117,7 @@ export default {
                     .post(" http://localhost:3000/tipo-equipo/crear", this.paquete)
                     .then(function (response) {
 
-                        alert("guardado");
+                        vm.dialogoExito = true;
                         console.log(response)
                         vm.cargar()
                     })
@@ -211,11 +223,24 @@ export default {
     color: #04080cd5;
   }
 
-  .card{
-    width:50%;
-    height: 35%;
-    
-} 
+  
+  .custom-card {
+    border: 4px solid #057E28; 
+    border-radius: 10px; 
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.2); 
+  }
+  
+  .v-card__title.headline {
+    background-color: #f0f0f0; 
+  }
+  
+  .v-card__text {
+    color: #333; 
+  }
+  
+  .v-card__actions .v-btn.success {
+    background-color: transparent; 
+  }
 .crearProducto{
     background-image: 
       linear-gradient(rgba(255, 255, 255, 0.5), rgba(226, 215, 215, 0.5)),

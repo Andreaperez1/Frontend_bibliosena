@@ -57,7 +57,17 @@
             </v-card-text>
         </v-card>
         </v-dialog>
-   
+
+     <!-- Diálogo de éxito al agregar un rol -->
+     <v-dialog v-model="dialogoAgregarRol" max-width="500px" class="d-flex align-center justify-center">
+                <v-card class="custom-card mx-auto" style="border: 4px">
+                    <v-card-title class="headline text-center">Rol Agregado</v-card-title>
+                    <v-card-text class="v-card__text">¡Rol agregado con éxito!</v-card-text>
+                    <v-card-actions class="d-flex justify-center">
+                        <v-btn color="success" text @click="dialogoAgregarRol = false">Aceptar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
     </v-card>
     </v-row>
    
@@ -68,6 +78,7 @@ import axios from "axios";
 export default {
     data: () => ({
         dialogoEditar: false,
+        dialogoAgregarRol: false,
         valid: true,
 
         campoRules: [(v) => !!v || "Campo Requerido"],
@@ -102,7 +113,7 @@ export default {
                     .post("http://localhost:3000/rol/crear", this.paquete)
                     .then(function (response) {
 
-                        alert("guardado");
+                      vm.dialogoAgregarRol = true;
                         console.log(response)
                         vm.cargar()
                     })
@@ -215,6 +226,28 @@ export default {
     color: #04080cd5;
   }
 
+  .card{
+    width:50%;
+    height: 35%;
+    
+}
+.custom-card {
+    border: 4px solid #057E28; 
+    border-radius: 10px; 
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.2); 
+  }
+  
+  .v-card__title.headline {
+    background-color: #f0f0f0; 
+  }
+  
+  .v-card__text {
+    color: #333; 
+  }
+  
+  .v-card__actions .v-btn.success {
+    background-color: transparent; 
+  }
 
 </style>
   

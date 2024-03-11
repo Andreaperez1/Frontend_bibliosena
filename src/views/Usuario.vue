@@ -1,66 +1,50 @@
 <template>
+  <div>
+    <v-row justify="center" class="crearProducto">
+      <v-card justify="center" width="500" style="background-color: transparent;">
+        <v-row>
+          <v-col>
+            <v-row class="d-flex justify-center align-center">
+            </v-row>
+            <v-img class="image" src="../assets/registrar.jpeg"></v-img>
 
-  <v-row justify="center" class="crearProducto">
-  
-    <v-card justify="center" width="500" style="background-color: transparent;">
-      <v-row>
-        <v-col>
-          
-          <v-row class="d-flex justify-center align-center">
-          </v-row>
-          <v-img  class="image" src="../assets/registrar.jpeg"></v-img>
-
-          <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field v-model.number="paquete.cedula" type="number" :rules="campoRules" label="Cedula" required>
-              </v-text-field>
-
-              <v-text-field v-model="paquete.nombre" :rules="campoRules" label="Nombre" required>
-              </v-text-field>
-
-              <v-text-field v-model="paquete.apellido" :rules="campoRules" label="Apellido" required>
-              </v-text-field>
-
-              <v-text-field   :rules="[rules.required, rules.email]" v-model="paquete.correo" label="Correo" required>
-
-              </v-text-field>
-
-              <v-text-field v-model.number="paquete.telefono"  type="number" :rules="campoRules" label="Telefono" required>
-
-              </v-text-field>
-
-              <v-text-field v-model="paquete.usuario" :rules="campoRules" label="Usuario" required>
-
-              </v-text-field>
-             
-
-              <v-text-field
-              v-model="paquete.contrasena"  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-              :rules="[rules2.required, rules2.min]"
-              @click:append="show1 = !show1"
-              label="Contrasena"
-              required
-            ></v-text-field>
-
-              <v-select v-model="paquete.id_rol" :items="rolDb" item-text="descripcion" item-value="id"
-                :rules="campoRules" label="Rol" required></v-select>
-
-              
-
+            <v-card-text>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-text-field v-model.number="paquete.cedula" type="number" :rules="campoRules" label="Cedula" required></v-text-field>
+                <v-text-field v-model="paquete.nombre" :rules="campoRules" label="Nombre" required></v-text-field>
+                <v-text-field v-model="paquete.apellido" :rules="campoRules" label="Apellido" required></v-text-field>
+                <v-text-field :rules="[rules.required, rules.email]" v-model="paquete.correo" label="Correo" required></v-text-field>
+                <v-text-field v-model.number="paquete.telefono" type="number" :rules="campoRules" label="Telefono" required></v-text-field>
+                <v-text-field v-model="paquete.usuario" :rules="campoRules" label="Usuario" required></v-text-field>
+                <v-text-field v-model="paquete.contrasena" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" :rules="[rules2.required, rules2.min]" @click:append="show1 = !show1" label="Contrasena" required></v-text-field>
+                <v-select v-model="paquete.id_rol" :items="rolDb" item-text="descripcion" item-value="id" :rules="campoRules" label="Rol" required></v-select>
                 <div class="button">
-                  <v-btn color="success" class="mr-8 lighten-2" @click="guardar" small>
-                    Guardar
-                  </v-btn>
+                  <v-btn color="success" class="mr-8 lighten-2" @click="guardar" small>Guardar</v-btn>
                 </div>
-            </v-form>
-          </v-card-text>
-        </v-col>
-      </v-row>
+              </v-form>
+            </v-card-text>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-row>
 
-    </v-card>
-  </v-row>
+<!-- Diálogo de éxito -->
+<v-dialog v-model="dialogSuccess" max-width="500" persistent>
+  <v-card style="border: 4px" class="mx-auto">  
+    <v-card-title class="headline" style="background-color: #f0f0f0;">¡Registro exitoso!</v-card-title>
+    <v-card-text>
+      El registro fue guardado con éxito.
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="success" text @click="dialogSuccess = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+
+  </div>
 </template>
+
     
     
 <script>
@@ -111,7 +95,8 @@ export default {
         { text: "Estado", value: "id_estado.estado" },
         { text: 'Actions', value: 'actions', sortable: false }
     ],
-    datos: []
+    datos: [],
+    dialogSuccess: false, // Variable para controlar el diálogo de éxito
 }),
 
 
@@ -124,7 +109,8 @@ export default {
           .post("http://localhost:3000/user/crear",  this.paquete)
           .then(function (response) {
             
-            alert("guardado con exito");
+            // Mostrar el diálogo de éxito
+            vm.dialogSuccess = true;
             console.log(response);
             vm.cargar()
           })
@@ -162,8 +148,6 @@ export default {
         .finally(function () {
         });
     },
-
-   
   },
   mounted() {
         this.cargar();
@@ -173,16 +157,13 @@ export default {
         axios
             .get("http://localhost:3000/user/")
             .then(function (response) {
-                // handle success
                 vm.datos = response.data;
                 console.log(response);
             })
             .catch(function (error) {
-                // handle error
                 console.log(error);
             })
             .finally(function () {
-                // always executed
             });
           }
 };
@@ -208,6 +189,23 @@ export default {
     linear-gradient(rgba(255, 255, 255, 0.5), rgba(226, 215, 215, 0.5)),
     url("../assets/fondo2.png");
 }
+
+
+/* Estilos para el título del diálogo */
+.v-card__title.headline {
+  background-color: #f0f0f0; 
+}
+
+
+.v-card__text {
+  color: #333; 
+}
+
+.v-card__actions .v-btn.success {
+  background-color: transparent; 
+}
+
+
 .image{
   width: 2000px;
   height: 400px;

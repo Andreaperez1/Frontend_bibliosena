@@ -4,7 +4,7 @@
         <v-row>
             <v-col>
                 <row  class="text-center ti">
-                    <v-card-title> Crear Tipo Equipo </v-card-title>
+                    <v-card-title style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif ; font-size: 30px; text-align: center;"> Crear Tipo Equipo </v-card-title>
                 </row>
                 
                 <v-row class="d-flex justify-center align-center">
@@ -215,7 +215,7 @@ export default {
 }
 
 .image {
-    max-width: 300px;
+    max-width: 270px;
     height: 200px;
 }
 

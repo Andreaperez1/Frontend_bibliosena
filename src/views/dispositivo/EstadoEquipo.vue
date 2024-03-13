@@ -43,7 +43,7 @@
             <v-card>
             <v-card-text>
                 <v-form ref="formEditar"  lazy-validation>
-                    <v-text-field v-model="paqueteEditar.estadousuario" :counter="10" :rules="campoRules" label="Estado"
+                    <v-text-field v-model="paqueteEditar.estado" :counter="10" :rules="campoRules" label="Estado"
                         required></v-text-field>
 
                     <v-btn color="success" class="mr-8 lighten-2" @click="editarEstado()" small>
@@ -83,7 +83,7 @@ export default {
         campoRules: [(v) => !!v || "Campo Requerido"],
 
         paquete: {
-            estadousuario: null,
+            estado: null,
 
         },
         paqueteEditar: {
@@ -109,7 +109,7 @@ export default {
         var vm = this;
         if (this.$refs.form.validate()) {
             axios
-                .post("http://localhost:3000/tipo-equipo/crear", this.paquete)
+                .post("http://localhost:3000/estado-equipo/crear", this.paquete)
                 .then(function (response) {
                     vm.dialogoExito = true; // Mostrar diálogo de éxito
                     console.log(response);

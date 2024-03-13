@@ -95,7 +95,7 @@ export default {
 </script>
 <style scoped>
 .fon {
-  background-image: url("../../assets/fondo2.jpg");
+  background-image: url("../../assets/fon.png");
   background-size: 100% 100%;
   width: 100%;
   height: auto;

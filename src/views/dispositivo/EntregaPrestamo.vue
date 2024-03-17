@@ -61,6 +61,53 @@
         </v-btn>
         <br>
         <br>
+        <!-- Diálogo de confirmación de actualización de estado -->
+  <v-dialog v-model="showConfirmationDialog" max-width="400">
+    <v-card>
+      <v-card-title class="text-h8">
+        Confirmación de Actualización
+      </v-card-title>
+      <v-card-text>
+        ¿Estás seguro de que deseas actualizar el estado del préstamo?
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue lighten-2" text @click="procesar">Confirmar</v-btn>
+        <v-btn color="indigo" text @click="showConfirmationDialog = false">Cancelar</v-btn>
+        <v-spacer></v-spacer>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Diálogo de éxito -->
+  <v-dialog v-model="showSuccessDialog" max-width="400">
+    <v-card>
+      <v-card-title class="text-h8">
+        Éxito
+      </v-card-title>
+      <v-card-text>
+        Se ha entregado el prestamo exitoxamente.
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="success" text @click="showSuccessDialog = false">Aceptar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Diálogo de error -->
+  <v-dialog v-model="showErrorDialog" max-width="400">
+    <v-card>
+      <v-card-title class="text-h8">
+        Error
+      </v-card-title>
+      <v-card-text>
+        Hubo un error al actualizar el estado del préstamo. Por favor, inténtelo de nuevo.
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="error" text @click="showErrorDialog = false">Aceptar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
     </v-card>
 </template>
   
@@ -69,8 +116,10 @@ import axios from 'axios';
 export default {
     data: () => ({
         dialogoEditar: false,
+        showConfirmationDialog: false,
+        showSuccessDialog: false,
+      showErrorDialog: false,
         valid: true,
-
         campoRules: [(v) => !!v || "Campo Requerido"],
 
         paquete: {
@@ -140,37 +189,37 @@ export default {
  
          },*/
 
-        procesar() {
-            var vm = this;
-
-            // Actualizar el estado del préstamo
-            axios.put("http://localhost:3000/prestamo/actualizar/" + vm.estado.idPrestamo, this.estado)
-                .then(function (response) {
-                    console.log('Estado del préstamo actualizado:', response.data);
-                    alert('Estado del préstamo actualizado');
-                    
-                
-                    vm.datos;
-                })
-                .catch(function (error) {
-                    console.error('Error al actualizar el estado:', error);
-                    console.log(vm.estado.id);
-                    alert('Error al actualizar el estado del préstamo. Por favor, inténtelo de nuevo.');
-                });
-        },
+         procesar() {
+      var vm = this;
+      axios
+        .put("http://localhost:3000/prestamo/actualizar/" + vm.estado.idPrestamo, this.estado)
+        .then(function (response) {
+          console.log('Estado del préstamo actualizado:', response.data);
+          vm.showSuccessDialog = true;
+          vm.datos;
+          window.location.reload(); 
+        })
+        .catch(function (error) {
+          console.error('Error al actualizar el estado:', error);
+          vm.showErrorDialog = true;
+          console.log(vm.estado.id);
+        })
+        .finally(function () {
+          vm.showConfirmationDialog = false; 
+        });
+    },
+    
 
         async detalle(item) {
             var vm = this;
             axios
                 .get("http://localhost:3000/detalle-prestamo/obtener/" + item.id)
                 .then(function (response) {
-                    // handle success
                     vm.datos2 = response.data;
                     vm.estado.idPrestamo = item.id;
 
                 })
                 .catch(function (error) {
-                    // handle error
                     console.log(error);
                 });
         },

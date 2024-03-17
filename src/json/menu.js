@@ -1,6 +1,4 @@
-
-
-let menu =
+ let menu =
 {
   Admin: [
     {
@@ -100,4 +98,4 @@ let menu =
   ]
 }
 
-module.exports = menu;
+export default menu;

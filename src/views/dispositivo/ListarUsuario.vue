@@ -60,6 +60,19 @@
             </v-card-text>
           </v-card>
         </v-dialog>
+
+        
+  <!-- Diálogo de confirmación para eliminar usuario -->
+  <v-dialog v-model="dialogoEliminarUsuario" max-width="500px" class="d-flex align-center justify-center">
+    <v-card class="custom-card mx-auto" style="border: 4px">
+      <v-card-title class="headline text-center">Confirmar Eliminación</v-card-title>
+      <v-card-text class="v-card__text">¿Estás seguro de que quieres eliminar este usuario?</v-card-text>
+      <v-card-actions class="d-flex justify-center">
+        <v-btn color="success" text @click="confirmarEliminarUsuario" >Eliminar</v-btn>
+        <v-btn color="success" text @click="dialogoEliminarUsuario = false">Cancelar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
     </v-card>
   </v-container>
   </v-row>
@@ -74,6 +87,8 @@ import axios from "axios";
 export default {
   data: () => ({
     dialogoEditar: false,
+    dialogoEliminarUsuario: false,
+    cedulaUsuarioAEliminar: null,
     valid: true,
 
     campoRules: [(v) => !!v || "Campo Requerido"],
@@ -162,16 +177,20 @@ export default {
         this.estadosDb = resp.data;
       })
     },
-
-
-
     async deleteItem(cedula) {
-      alert(cedula);
-      await axios.delete('http://localhost:3000/user/' + cedula).then(response => {
-        console.log(response.data);
-      }).finally(async () => {
-        await this.cargar()
-      })
+      // Almacenar la cédula del usuario a eliminar
+      this.cedulaUsuarioAEliminar = cedula;
+      // Abrir el diálogo de confirmación
+      this.dialogoEliminarUsuario = true;
+    },
+    async confirmarEliminarUsuario() {
+      if (this.cedulaUsuarioAEliminar) {
+        await axios.delete('http://localhost:3000/user/' + this.cedulaUsuarioAEliminar).then(response => {
+          console.log(response.data);
+          this.cargar();
+        });
+        this.dialogoEliminarUsuario = false;
+      }
     },
     async editarUser() {
       try {

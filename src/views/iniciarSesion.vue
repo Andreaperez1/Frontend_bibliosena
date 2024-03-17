@@ -163,35 +163,29 @@
     <v-container fluid>
       <v-row align="center">
         <!-- Primera sección -->
-        <v-col cols="4" sm="4" md="4" class="mt-5 border-right">
-          <v-row style="margin-top: 6px">
-          </v-row>
-          <v-img src="../assets/logos/fondo1.png" max-height="130" max-width="250" />
-          <p style="color:black;">
-            El SBSENA. Está conformado por el Equipo de Gestión, quienes tienen a su cargo la formulación y gestión de proyectos, la implementación y sostenibilidad del Proyecto Biblioteca Digital
-          </p>
-        </v-col>
-        
-        <!-- Segunda sección -->
-        <v-col cols="4" sm="4" md="4" class="mt-5 border-right">
-          <h4 class="mb-2 text-dark">
-    Contacto
-</h4>
-          <p class="text-dark"><i class="fas fa-home me-3"></i> Calle 24 con, Cra. 14, Montería, Córdoba</p>
-          <p class="text-dark">
-            <i class="fas fa-envelope me-3"></i>
-            info@example.com
-          </p>
-          <p class="text-dark"><i class="fas fa-phone me-3"></i> (94) 7838050</p>
-        </v-col>
-        
-        <!-- Tercera sección -->
-        <v-col cols="4" sm="4" md="4" class="mt-4">
-          <div style="font-family: Times, 'Times New Roman', serif">
-            <h4 class="mb-2 titulo-redes">Redes sociales</h4>
+        <v-col cols="12" md="4">
+          <div class="text-center mb-4">
+            <v-img src="../assets/logos/fondo1.png" max-height="130" max-width="250"></v-img>
           </div>
-          <br>
-          <div>
+          <p class="text-center" style="color: black;">
+            El SBSENA está conformado por el Equipo de Gestión, quienes tienen a su cargo la formulación y gestión de proyectos, la implementación y sostenibilidad del Proyecto Biblioteca Digital.
+          </p>
+        </v-col>
+
+        <!-- Segunda sección -->
+        <v-col cols="12" md="4">
+          <h4 class="mb-4 titulo-redes text-center">Contacto</h4>
+          <div class="text-center">
+            <p><i class="fas fa-home me-3"></i> Calle 24 con, Cra. 14, Montería, Córdoba</p>
+            <p><i class="fas fa-envelope me-3"></i> info@example.com</p>
+            <p><i class="fas fa-phone me-3"></i> (94) 7838050</p>
+          </div>
+        </v-col>
+
+        <!-- Tercera sección -->
+        <v-col cols="12" md="4">
+          <h4 class="mb-4 titulo-redes text-center">Redes sociales</h4>
+          <div class="text-center">
             <v-row align="center" justify="center">
               <v-icon color="#21618C" class="icono-redes">fab fa-facebook-f</v-icon>
               <v-icon color="#85C1E9" class="icono-redes">fab fa-twitter</v-icon>
@@ -200,10 +194,10 @@
             </v-row>
           </div>
         </v-col>
-        
       </v-row>
     </v-container>
   </v-footer>
+
 </div>
 
   </v-app>
@@ -476,8 +470,10 @@ background-color: #057E28;
 }
 .titulo-redes {
   font-size: 20px;
+  text-align: center;
   color: #0e0808; /* Color de texto para el título */
 }
+
 
 .icono-redes {
   margin: 20px;

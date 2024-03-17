@@ -87,7 +87,17 @@
       </v-btn>
         <br>
         <br>
-       
+        <v-dialog v-model="showNovedadDialog" max-width="400">
+    <v-card>
+      <v-card-title>Confirmación</v-card-title>
+      <v-card-text>
+        Se ha creado la novedad correctamente.
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="success" @click="showNovedadDialog = false">Aceptar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
     </v-card>
 </template>
   
@@ -96,10 +106,9 @@ import axios from 'axios';
 export default {
     data: () => ({
     dialogoEditar:false,
+    showNovedadDialog: false,
         valid: true,
-
         campoRules: [(v) => !!v || "Campo Requerido"],
-
         paquete: {
             cedula: null,
         },
@@ -133,13 +142,8 @@ export default {
                 .then(function (response) {
                     console.log(response)
                     vm.datos = response.data;
-
-                  
-
-
                 })
                 .catch(function (error) {
-                    // handle error
                     alert(error);
                     console.log(error);
                 })
@@ -196,20 +200,13 @@ export default {
             }
         },
         async procesar() {
-            try {
-                await axios.post("http://localhost:3000/novedad/crear", this.NovedadN).then(() => {
-                    alert("Se creo");
-                })
-            }
-            catch(error) {
-                console.log(error);
-            }
+      try {
+        await axios.post("http://localhost:3000/novedad/crear", this.NovedadN);
+        this.showNovedadDialog = true; 
+      } catch (error) {
+        console.error(error);
+      }
         }
-
-
-
-
-
     },
     mounted() {
         this.listarEstados();

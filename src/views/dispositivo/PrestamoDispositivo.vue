@@ -11,32 +11,22 @@
         <v-card-text>
           <v-form ref="form">
             <v-row>
-             
-             
+
+
               <v-col cols="12" md="6">
                 <v-text-field v-model="dateRangeText" :rules="nameRules" label="Fecha del Préstamo"
                   prepend-icon="mdi-calendar" readonly @click="showDatePickerDialog = true">
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="horaInicio"
-                  :rules="nameRules"
-                  label="Hora de Inicio"
-                  prepend-icon="mdi-clock-time-four-outline"
-                  readonly
-                  @click="showHoraInicioDialog = true"
-                ></v-text-field>
+                <v-text-field v-model="horaInicio" :rules="nameRules" label="Hora de Inicio"
+                  prepend-icon="mdi-clock-time-four-outline" readonly
+                  @click="showHoraInicioDialog = true"></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field
-                v-model="horaFinal"
-                :rules="nameRules"
-                label="Hora de Entrega"
-                prepend-icon="mdi-clock-time-four-outline"
-                readonly
-                @click="showHoraFinalDialog = true"
-              ></v-text-field>
+                <v-text-field v-model="horaFinal" :rules="nameRules" label="Hora de Entrega"
+                  prepend-icon="mdi-clock-time-four-outline" readonly
+                  @click="showHoraFinalDialog = true"></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
                 <v-col cols="12" md="9">
@@ -46,7 +36,8 @@
 
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field v-model="detalleprestamo.cantidad"  type="number" label="Cantidad de equipo"></v-text-field>
+                <v-text-field v-model="detalleprestamo.cantidad" type="number"
+                  label="Cantidad de equipo"></v-text-field>
               </v-col>
 
 
@@ -62,130 +53,183 @@
         </v-row>
         <br>
         <br>
-        <v-dialog v-model="showHoraInicioDialog">
+        <v-dialog v-model="showHoraInicioDialog" max-width="400">
           <v-card class="modal">
             <v-card-title class="text-uppercase">Hora de inicio</v-card-title>
-            <v-time-picker v-model="horaInicio" full-width></v-time-picker>
+            <v-time-picker v-model="horaInicio" full-width color="success"></v-time-picker>
             <v-card-actions>
-              <v-btn color="green" small @click="saveHoraInicio">Guardar</v-btn>
-              <v-btn color="red" small @click="cancelHoraInicio">Cancelar</v-btn>
+              <v-btn color="success" small @click="saveHoraInicio">Guardar</v-btn>
+              <v-btn color="success" small @click="cancelHoraInicio">Cancelar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-    
+
         <!-- Modal de la hora de entrega -->
-        <v-dialog v-model="showHoraFinalDialog">
+        <v-dialog v-model="showHoraFinalDialog" max-width="400">
           <v-card class="modal">
             <v-card-title class="text-uppercase">Hora de entrega</v-card-title>
-            <v-time-picker v-model="horaFinal" full-width></v-time-picker>
+            <v-time-picker v-model="horaFinal" full-width color="success"></v-time-picker>
             <v-card-actions>
-              <v-btn color="green " small @click="saveHoraFinal">Guardar</v-btn>
-              <v-btn color="red" small @click="cancelHoraFinal">Cancelar</v-btn>
+              <v-btn color="success" small @click="saveHoraFinal">Guardar</v-btn>
+              <v-btn color="success" small @click="cancelHoraFinal">Cancelar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-    
+
         <!-- Modal del calendario -->
-        <v-dialog v-model="showDatePickerDialog" max-width="500">
+        <v-dialog v-model="showDatePickerDialog" max-width="400">
           <v-card class="modal2">
             <v-card-title class="text-uppercase">Fecha del Préstamo</v-card-title>
             <v-card-text>
               <v-date-picker v-model="dates" range></v-date-picker>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="green" small @click="saveDateRange">Guardar</v-btn>
-              <v-btn color="#fff" small @click="cancelDateRange">Cancelar</v-btn>
+              <v-btn color="success" small @click="saveDateRange">Guardar</v-btn>
+              <v-btn color="success" small @click="cancelDateRange">Cancelar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-      
+        <v-btn height="35px" width="120px"  color="aliceblue" style="color: #508d42 ;font-size: 18px" class="mr-12 lighten-2" @click="Prestar" small>
+    Prestar
+  </v-btn>
         <br>
         <template>
           <!--tabla de prestamos-->
           <center>
             <v-simple-table class="tabla">
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-center">Tipo de equipo</th>
-                    <th class="text-center">Cantidad</th>
-                    <th class="text-right">
-                      <v-btn height="38px" width="95px" justify="center" color=" aliceblue" style="color: #508d42 ;font-size: 18px"  class="mr-4" @click="Prestar">Prestar</v-btn>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in paquete.detalleprestamo" :key="index">
-                    <td class="text-center">
-                      {{ getDescripcionTipo(item.id_tipo) }}
-                    </td>
-                    <td class="text-center">
-                      {{ item.cantidad }}
-                    </td>
-                    <td class="text-right">
-                      <v-icon small @click="borrar(index)"> mdi-delete </v-icon>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
+    <template v-slot:default>
+      <thead>
+        <tr>
+          <th class="text-center">Tipo de equipo</th>
+          <th class="text-center">Cantidad</th>
+          <th class="text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in paquete.detalleprestamo" :key="index">
+          <td class="text-center">
+            <template v-if="editIndex !== index">
+              {{ getDescripcionTipo(item.id_tipo) }}
+            </template>
+            <template v-else>
+              <v-select v-model="editedItem.id_tipo" :items="tipo_equipo" item-text="tipo" item-value="id" label="Tipo de equipo"></v-select>
+            </template>
+          </td>
+          <td class="text-center">
+            <template v-if="editIndex !== index">
+              {{ item.cantidad }}
+            </template>
+            <template v-else>
+              <v-text-field v-model="editedItem.cantidad" type="number" label="Cantidad de equipo"></v-text-field>
+            </template>
+          </td>
+          <td class="text-right">
+            <v-icon small @click="editIndex !== index ? editar(index) : guardarEdicion()"> mdi-pencil </v-icon>
+            <v-icon small @click="borrar(index)"> mdi-delete </v-icon> 
+          </td>
+        </tr>
+      </tbody>
+    </template>
+  </v-simple-table>
           </center>
         </template>
         <br>
         <br>
-        
+
       </v-card>
 
-      <!--Modal de confirmacion  para  editar -->
-      <v-dialog v-model="dialog" max-width="700px">
-        <template>
-          <v-simple-table>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left"> Id</th>
-                  <th class="text-left">Tipo</th>
-                  <th class="text-left">Serial del equipo</th>
-                  <th class="text-left">Fecha de prestamo</th>
-                  <th class="text-left">Fecha de devolucion</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(items, index) in datos2.detalleprestamo" :headers2="headers2" :key="items.id">
-                  <td>{{ datos2.id}}</td>
-                  <td>{{ datos2.detalleprestamo[index].equipo.id_tipo.tipo }} </td>
-                  <td>{{ datos2.detalleprestamo[index].equipo.serial}}</td>
-                  <td>{{ formatearFecha(datos2.fecha_prestamo) }}</td>
-                  <td>{{ formatearFecha(datos2.fecha_devolucion) }}</td>
-                </tr>
-               
-              </tbody>
-            </template>
-          </v-simple-table>
-        </template>
+     
+ 
+      <v-dialog v-model="showDialog" max-width="400">
+        <v-card>
+          <v-card-title>Advertencia</v-card-title>
+          <v-card-text>
+            Por favor llene todos los campos.
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="success" @click="showDialog = false">Aceptar</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-dialog>
 
+      <!-- Diálogo de confirmación para eliminar detalle de préstamo -->
+      <v-dialog v-model="dialogoEliminarDetalle" max-width="500px">
+        <v-card>
+          <v-card-title class="headline text-center">Confirmar eliminación</v-card-title>
+          <v-card-text class="text-center">
+            ¿Estás seguro de que deseas eliminar este detalle de préstamo?
+          </v-card-text>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="error" @click="eliminarDetalle">Eliminar</v-btn>
+            <v-btn color="primary" @click="dialogoEliminarDetalle = false">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-      <!-- Modal de confirmación para eliminar -->
-    <v-dialog v-model="dialog2" max-width="290">
-      <v-card>
-        <v-card-title class="text-h8">
-          Estas seguro de eliminar el equipo
-        </v-card-title>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue lighten-2"
-            text
-            @click="eliminar(), (dialog2 = false)"
-          >
-            Confirmar
-          </v-btn>
-          <v-btn color="indigo" text @click="dialog2 = false">Cancelar</v-btn>
-          <v-spacer></v-spacer>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      <v-dialog v-model="dialogoConfirmacionBorrado" max-width="500px">
+        <v-card>
+          <v-card-title class="headline text-center">Confirmar eliminación</v-card-title>
+          <v-card-text class="text-center">
+            ¿Estás seguro de que deseas eliminar este detalle de préstamo?
+          </v-card-text>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="success" @click="eliminarDetalleConfirmado">Eliminar</v-btn>
+            <v-btn color="success" @click="dialogoConfirmacionBorrado = false">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="dialogoNoEquipos" max-width="500px">
+  <v-card>
+    <v-card-title class="headline text-center">No hay equipos disponibles</v-card-title>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" @click="dialogoNoEquipos = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+<v-dialog v-model="dialogoConfirmacionPrestamo" max-width="500px">
+  <v-card>
+    <v-card-title class="headline text-center">Confirmación de préstamo</v-card-title>
+    <v-card-text class="text-center">
+            Su prestamo ha sido exitoso.
+          </v-card-text>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" @click="dialogoConfirmacionPrestamo = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+<v-dialog v-model="dialogoPrestamoExitoso" max-width="500px">
+  <v-card>
+    <v-card-title class="headline text-center">Préstamo exitoso</v-card-title>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" @click="dialogoPrestamoExitoso = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+<v-dialog v-model="dialogoRegistrePrimero" max-width="500px">
+  <v-card>
+    <v-card-title class="headline text-center">Registre primero el préstamo</v-card-title>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" @click="dialogoRegistrePrimero = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+<v-dialog v-model="dialogoFechaDevolucion" max-width="500px">
+  <v-card>
+    <v-card-title class="headline text-center">Error</v-card-title>
+    <v-card-text class="text-center">
+      La fecha de devolución no puede ser menor que la fecha del prestamo.
+    </v-card-text>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" @click="dialogoFechaDevolucion = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
     </v-container>
   </v-row>
 </template>
@@ -201,7 +245,6 @@ export default {
       (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
     ],
     tipo_equipo: null,
-    
     valid: true,
     sheet: false,
     dates: ["", ""],
@@ -215,33 +258,42 @@ export default {
     detalleprestamo: { id_tipo: null, cantidad: null },
     dialog: false,
     dialog2: false,
-    search:"",
+    search: "",
+    showDialog: false,
+    dialogoConfirmacionBorrado: false,
+    indexBorrado: null,
+    dialogoNoEquipos: false,
+    dialogoFechaDevolucion:false,
+  dialogoConfirmacionPrestamo: false,
+  dialogoPrestamoExitoso: false,
+  dialogoRegistrePrimero: false,
+  editIndex: -1,
+      editedItem: { id_tipo: null, cantidad: null },
+    dialogoEliminarDetalle: false,
     paqueteEditar: {
       id: null,
       serial: null,
       fecha_prestamo: null,
-      fecha_devolucion:null,
-     
-    },
+      fecha_devolucion: null,
 
+    },
     paquete: {
       fecha_prestamo: null,
       fecha_devolucion: null,
-      cedula:null,
+      cedula: null,
       id_estado: 1,
       detalleprestamo: [
 
       ],
 
     },
-    nameRules: [(v) => !!v || "Campo requerido"], 
+    nameRules: [(v) => !!v || "Campo requerido"],
     estadodB: [],
     usuarioDB: [],
 
-  
     headers: [
       { text: "Id", value: "id" },
-      { text: "Cedula", value:"cedula.cedula" },
+      { text: "Cedula", value: "cedula.cedula" },
       { text: "Fecha Prestamo", value: "fecha_prestamo" },
       { text: "Fecha Devolucion", value: "fecha_devolucion" },
       { text: "Estado Prestamo", value: "id_estado.estado" },
@@ -250,17 +302,17 @@ export default {
 
 
     ],
-    headers2:[
-        { text: "Id", value: "id" },
-        { text: "Serial", value: "detalle.equipo.serial" },
-        {text: 'Tipo', value: "detalle.equipo.tipo"},
-        { text: "Fecha Prestamo", value: "fecha_prestamo" },
-        { text: "Fecha Devolución", value: "fecha_devolucion" },
-        { text: "Actions", value: "actions", sortable: false }
+    headers2: [
+      { text: "Id", value: "id" },
+      { text: "Serial", value: "detalle.equipo.serial" },
+      { text: 'Tipo', value: "detalle.equipo.tipo" },
+      { text: "Fecha Prestamo", value: "fecha_prestamo" },
+      { text: "Fecha Devolución", value: "fecha_devolucion" },
+      { text: "Actions", value: "actions", sortable: false }
     ],
     datos: [],
-    datos2:[],
-    
+    datos2: [],
+
   }),
 
   watch: {
@@ -292,8 +344,8 @@ export default {
 
   methods: {
     guardarID(item) {
-      this.datos2=item;
-      this.dialog= true;
+      this.datos2 = item;
+      this.dialog = true;
     },
     async detalle(item) {
       var vm = this;
@@ -303,22 +355,22 @@ export default {
           // handle success
           vm.datos2 = response.data;
           console.log(vm.datos2);
-          
+
         })
         .catch(function (error) {
           // handle error
           console.log(error);
         });
     },
-    getDescripcionTipo(id){
-      const tipo = this.tipo_equipo.find ((te) =>  te.id===id);
-      return tipo ? tipo.tipo: "N/A";
+    getDescripcionTipo(id) {
+      const tipo = this.tipo_equipo.find((te) => te.id === id);
+      return tipo ? tipo.tipo : "N/A";
 
     },
     async listartipoequipo() {
       var vm = this;
       await axios.get('http://localhost:3000/tipo-equipo')
-      .then(function (response) {
+        .then(function (response) {
           // handle success
           vm.tipo_equipo = response.data;
           console.log(vm.tipo_equipo);
@@ -331,72 +383,76 @@ export default {
           vm.$refs.form.reset();
         });
     },
-    guardar() {
-      if (
-        this.$refs.form.validate() &
-        (this.detalleprestamo.id_tipo != null) &
-        (this.detalleprestamo.cantidad != null)
-      ) {
-        this.paquete.detalleprestamo.push({ ...this.detalleprestamo });
-        this.detalleprestamo.id_tipo = null;
-        this.detalleprestamo.cantidad = null;
-      } else {
-        alert("Por favor llene todos los campos");
-      }
-    },
-    borrar(index) {
-      this.paquete.detalleprestamo.splice(index, 1);
+      guardar() {
+  if (
+    this.$refs.form.validate() &&
+    this.detalleprestamo.id_tipo != null &&
+    this.detalleprestamo.cantidad != null
+  ) {
+    this.paquete.detalleprestamo.push({ ...this.detalleprestamo });
+    this.detalleprestamo = { id_tipo: null, cantidad: null };
+  } else {
+    this.showDialog = true;
+  }
+},
 
-      alert("Borrado exitoso");
+    borrar(index) {
+      this.indexBorrado = index;
+      this.dialogoConfirmacionBorrado = true;
+    },
+    eliminarDetalleConfirmado() {
+      this.paquete.detalleprestamo.splice(this.indexBorrado, 1);
+      this.indexBorrado = null;
+      this.dialogoConfirmacionBorrado = false;
     },
     Prestar() {
-      var vm = this;
-      this.paquete.cedula =  this.$store.getters.getCedula;
-      if (this.$refs.form.validate()){
-        axios
-          .post(`http://localhost:3000/prestamo/crear`, this.paquete)
-          .then( (response) => {
-            
-            vm.cargar()
-            console.log(response);
-            if (response.data == "vacio") {
-                alert("No hay equipos disponibles");
-              } else {
-                if (response.data.numero > 0) {
-                 
-                  vm.objConfimacion.numero = response.data.numero;
-                  vm.confirmacion = true;
-                } else {
-                  alert("Prestamo exitoso");
-                }
-              }
-          })
-          .catch(function (error) {
-            // handle error
-            alert(error);
-            console.log(error);
-          })
-          .finally(function () {
-           /* vm.$refs.form.reset();*/
-          });
-          
-      }else{
-        alert("Registre primero el prestamo");
-      }
+  var vm = this;
+  this.paquete.cedula = this.$store.getters.getCedula;
+  const fechaPrestamo = new Date();
+  const fechaDevolucion = new Date(this.paquete.fecha_devolucion);
 
-    },
+  if (fechaDevolucion < fechaPrestamo) {
+    this.dialogoFechaDevolucion = true; 
+    return;
+  }
+
+  if (this.$refs.form.validate()) {
+    axios
+      .post(`http://localhost:3000/prestamo/crear`, this.paquete)
+      .then((response) => {
+        vm.cargar();
+        console.log(response);
+        if (response.data.respuesta === "No hay ningun equipo disponible") {
+          vm.dialogoNoEquipos = true;
+        } else {
+          if (response.data.numero > 0) {
+            vm.objConfimacion.numero = response.data.numero;
+            vm.confirmacion = true;
+          } else {
+            vm.dialogoPrestamoExitoso = true;
+          }
+        }
+      })
+      .catch(function (error) {
+        alert(error);
+        console.log(error);
+      });
+  } else {
+    vm.dialogoRegistrePrimero = true;
+  }
+},
     eliminarDetalle() {
       var vm = this;
       axios
-        .delete("http://localhost:3000/detalle-prestamo/", vm.objConfimacion.id)
+        .delete("http://localhost:3000/detalle-prestamo/" + vm.objConfimacion.id)
         .then(function (response) {
           console.log(response);
           alert("cancelacion exitosa");
+          vm.dialogoEliminarDetalle = false;
         })
         .catch(function (error) {
           console.log(error);
-        })
-        .finally(function () {});
+        });
     },
 
 
@@ -406,7 +462,7 @@ export default {
       })
     },
 
-  
+
     async listarusuario() {
       await axios.get('http://localhost:3000/user').then(resp => {
         this.usuarioDB = resp.data;
@@ -418,19 +474,28 @@ export default {
       })
     },
 
-    editItem(item) {
-      console.log(item);
-      this.dialog = true;
-
-      this.paqueteEditar = {
-      
-        fecha_devolucion:item.fecha_devolucion,
-        fecha_prestamo: item.fecha_prestamo,
-        serial: item.serial,
-        id: item.id
-      }
+    
+    editar(index) {
+      this.editIndex = index;
+      this.editedItem = { ...this.paquete.detalleprestamo[index] };
     },
 
+    cancelarEdicion() {
+      this.editIndex = -1;
+      this.editedItem = { id_tipo: null, cantidad: null };
+    },
+
+    guardarEdicion() {
+      if (this.editedItem.id_tipo && this.editedItem.cantidad) {
+        this.$set(this.paquete.detalleprestamo, this.editIndex, { ...this.editedItem });
+        this.cancelarEdicion();
+      } else {
+        alert('Por favor, complete todos los campos.');
+      }
+    },
+    cancelDateRange() {
+    this.showDatePickerDialog = false;
+  },
     async cargar() {
       var vm = this
       this.listarusuario();
@@ -459,7 +524,8 @@ export default {
         this.cargar();
 
       })
-    },reset() {
+  
+    }, reset() {
       this.$refs.form.reset();
     },
     resetValidation() {
@@ -509,8 +575,8 @@ export default {
     this.listartipoequipo();
     const rol = this.$store.getters.getRol;
     console.log(this.$store.getters.getUsuario);
-   if(rol=='Instructor'){
-     this.paquete.cedula=this.$store.getters.getUsuario.cedula;
+    if (rol == 'Instructor') {
+      this.paquete.cedula = this.$store.getters.getUsuario.cedula;
     }
     var vm = this;
     axios

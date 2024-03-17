@@ -13,15 +13,16 @@
       
       <v-divider> </v-divider>
 
-      <sidebar-menu  style="justify-content: center;" class="tipo" showOneChild :menu="menu" />
+      <sidebar-menu showOneChild :menu="menu" />
     </vuescroll>
   </v-navigation-drawer>
 </template>
 
 <script>
-const menuB = require('../../json/menu');
-import { SidebarMenu } from "vue-sidebar-menu";
+
+import {SidebarMenu} from "vue-sidebar-menu";
 import vuescroll from "vuescroll";
+const menuB = require('../../json/menu').default;
 
 export default {
   components: {
@@ -101,17 +102,15 @@ export default {
   height: auto;
   margin: 0;
 }
-.letra {
-  color: #17202a;
-  font-size: 18px;
-  font-family: "time new roman ", cursive;
-  font-weight: bold;
-}
+
 .margen {
   margin-top: 45px;
 }
-.tipo {
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif,
 
+.v-sidebar-menu.vsm-default .vms-header {
+ text-align: center;
+  color: black !important;
 }
+
+
 </style>

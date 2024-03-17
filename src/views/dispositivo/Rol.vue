@@ -15,7 +15,7 @@
                             required></v-text-field>
 
                             <v-row class="d-flex justify-center">
-                                <v-btn color="#85C1E9" class="w-33" @click="guardar" small>
+                                <v-btn color="#1B9F4E" class="w-33" @click="guardar" small>
                                     Guardar
                                 </v-btn>
                             </v-row>
@@ -25,22 +25,21 @@
                 <br><br>
 
        
-        <v-toolbar  height="90px" dark prominent color="#ABEBC6" elevation="16">
+        <v-toolbar  height="90px" dark prominent color="#8BC34A " elevation="16">
             <v-toolbar-title class=" text-center color-text">Listado de Roles</v-toolbar-title>
             <v-spacer></v-spacer>
         </v-toolbar>
-        <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1">
-            
-            
-            <template v-slot:item.actions="{ item }">
-                <v-icon small class="mr-2" @click="editItem(Object.assign({}, item))">
-                    mdi-pencil
-                </v-icon>
-                <v-icon small @click="deleteItem(item.id)">
-                    mdi-delete
-                </v-icon>
-            </template>
-        </v-data-table>
+       <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1">
+    <template v-slot:item.actions="{ item }">
+        <v-icon small class="mr-2" @click="editItem(item)">
+            mdi-pencil
+        </v-icon>
+        <v-icon small @click="deleteItem(item.id)">
+            mdi-delete
+        </v-icon>
+    </template>
+</v-data-table>
+
 
         <v-dialog  height="700px" width="500px" v-model="dialogoEditar">
             <v-card>
@@ -69,6 +68,17 @@
                 </v-card>
             </v-dialog>
     </v-card>
+
+    <v-dialog v-model="dialogoEliminarRol" max-width="500px" class="d-flex align-center justify-center">
+  <v-card class="custom-card mx-auto" style="border: 4px">
+    <v-card-title class="headline text-center">Eliminar Rol</v-card-title>
+    <v-card-text class="v-card__text">¿Estás seguro de que deseas eliminar este rol?</v-card-text>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" text @click="confirmarEliminarRol" >Eliminar</v-btn>
+      <v-btn color="sucxess" text @click="dialogoEliminarRol = false" >Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
     </v-row>
    
 </template>
@@ -79,6 +89,8 @@ export default {
     data: () => ({
         dialogoEditar: false,
         dialogoAgregarRol: false,
+        dialogoEliminarRol: false,
+        idRolAEliminar: null, 
         valid: true,
 
         campoRules: [(v) => !!v || "Campo Requerido"],
@@ -101,99 +113,86 @@ export default {
 
         ],
         datos: [],
-
-
     }),
 
     methods: {
-        guardar() {
-            var vm = this;
-            if (this.$refs.form.validate()) {
-                axios
-                    .post("http://localhost:3000/rol/crear", this.paquete)
-                    .then(function (response) {
-
-                      vm.dialogoAgregarRol = true;
-                        console.log(response)
-                        vm.cargar()
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    })
-                    .finally(function () {
-                        vm.$refs.form.reset();
-                    });
-            }
-
-        },
-        async cargar() {
-            var vm = this
-            await axios
-                .get("http://localhost:3000/rol/")
+    guardar() {
+        var vm = this;
+        if (this.$refs.form.validate()) {
+            axios
+                .post("http://localhost:3000/rol/crear", this.paquete)
                 .then(function (response) {
-                    // handle success
-                    vm.datos = response.data;
-                    console.log(vm.datos);
+                  vm.dialogoAgregarRol = true;
+                    console.log(response)
+                    vm.cargar()
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error);
                 })
                 .finally(function () {
-                    // always executed
+                    vm.$refs.form.reset();
                 });
-
-
-        },
-        editItem(item) {
-            console.log(item);
-            this.dialogoEditar = true;
-            this.paqueteEditar = {
-                id_rol: item.id_rol,
-                descripcion: item.descripcion
-            }
-
-            
-
-            },
-                        
-         async deleteItem(id) {
-            alert(id);
-            await axios.delete('http://localhost:3000/rol/' + id).then(response => {
+        }
+    },
+    async cargar() {
+        var vm = this
+        await axios
+            .get("http://localhost:3000/rol/")
+            .then(function (response) {
+                // handle success
+                vm.datos = response.data;
+                console.log(vm.datos);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+    },
+    editItem(item) {
+        console.log(item);
+        this.dialogoEditar = true;
+        this.paqueteEditar = {
+            id_rol: item.id_rol,
+            descripcion: item.descripcion
+        }
+    },
+    async deleteItem(id) {
+        this.idRolAEliminar = id;
+        this.dialogoEliminarRol = true;
+    },
+    async confirmarEliminarRol() {
+        if (this.idRolAEliminar) {
+            // Realiza la eliminación del rol
+            await axios.delete('http://localhost:3000/rol/' + this.idRolAEliminar).then(response => {
                 console.log(response.data);
                 this.cargar();
-            
-            })
-        },
-        async editarRol() {
-            try {
-                await axios.put('http://localhost:3000/rol/actualizar',this.paqueteEditar).then(() => {
-                this.dialogoEditar = false;
-                this.cargar()
-                ;
             });
-
-            }
-            catch (error) {
-                this.dialogoEditar = false;
-                alert(error);
-            }
-            
+            this.dialogoEliminarRol = false;
         }
-
-    
-
     },
+    async editarRol() {
+        try {
+            await axios.put('http://localhost:3000/rol/actualizar', this.paqueteEditar).then(() => {
+                this.dialogoEditar = false;
+                this.cargar();
+            });
+        } catch (error) {
+            this.dialogoEditar = false;
+            alert(error);
+        }
+    }
+},
+
     mounted() {
-        this.cargar()
-
-
-
-
+        this.cargar();
     },
 };
 </script>
+
   
 <style>
 .crearProducto{
@@ -249,5 +248,19 @@ export default {
     background-color: transparent; 
   }
 
-</style>
+  .eliminar-button {
+    background-color: #057E28 !important; 
+  }
+
+  .eliminar-button .v-btn__content {
+    color: white !important; }
+
+  .cancelar-button {
+    background-color: #057E28 !important; 
+  }
+
+  .cancelar-button .v-btn__content {
+    color: white !important; }
   
+
+</style>

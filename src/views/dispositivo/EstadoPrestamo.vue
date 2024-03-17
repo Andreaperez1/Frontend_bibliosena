@@ -77,9 +77,20 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
+
+             <!-- Diálogo de confirmación para eliminar estado de préstamo -->
+<v-dialog v-model="dialogoEliminarEstado" max-width="500px" class="d-flex align-center justify-center">
+  <v-card class="custom-card mx-auto" style="border: 4px">
+    <v-card-title class="headline text-center">Eliminar Estado Prestamo.</v-card-title>
+    <v-card-text class="v-card__text">¿Estás seguro de que quieres eliminar este estado de préstamo?</v-card-text>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" text @click="confirmarEliminarEstado" class="eliminar-button">Eliminar</v-btn>
+      <v-btn color="success" text @click="dialogoEliminarEstado= false" class="cancelar-button">Cancelar</v-btn>
+    </v-card-actions>
+</v-card>
+</v-dialog>
     </v-card>
-</v-row>
-   
+    </v-row>
 </template>
   
 <script>
@@ -87,6 +98,9 @@ import axios from "axios";
 export default {
     data: () => ({
         dialogoEditar: false,
+        dialogoExito:false,
+        dialogoEliminarEstado: false,
+        idEstadoEliminar: null, 
         valid: true,
 
         campoRules: [(v) => !!v || "Campo Requerido"],
@@ -140,16 +154,13 @@ export default {
              await axios
                 .get("http://localhost:3000/estado-prestamo/")
                 .then(function (response) {
-                    // handle success
                     vm.datos = response.data;
                     console.log(vm.datos);
                 })
                 .catch(function (error) {
-                    // handle error
                     console.log(error);
                 })
                 .finally(function () {
-                    // always executed
                 });
 
 
@@ -165,17 +176,19 @@ export default {
             
 
         },
-
-                        
-         async deleteItem(id) {
-            alert(id);
-            await axios.delete('http://localhost:3000/estado-prestamo/' + id).then(response => {
-               
+        async deleteItem(id) {
+        this.idEstadoEliminar = id;
+        this.dialogoEliminarEstado = true;
+    },
+    async confirmarEliminarEstado() {
+        if (this.idEstadoEliminar) {
+            await axios.delete('http://localhost:3000/rol/' + this.idEstadoEliminar).then(response => {
                 console.log(response.data);
                 this.cargar();
-            
-            })
-        },
+            });
+            this.dialogoEliminarEstado = false;
+        }
+    },
         async editarEstado() {
             try {
                 await axios.put('http://localhost:3000/estado-prestamo/actualizar',this.paqueteEditar).then(() => {

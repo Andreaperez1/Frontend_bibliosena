@@ -23,10 +23,8 @@
                     <v-text-field v-model="paquete.serial" :rules="campoRules" label="Serial" required>
                     </v-text-field>
 
-                    <v-text-field v-model="paquete.serialTelefonico" :rules="campoRules" label="Serial Telefonico" required
-                     v-if="paquete.id_tipo==1 || paquete.id_tipo==3"  
-                    
-                    >
+                    <v-text-field v-model="paquete.serialtelefonico" :rules="campoRules" label="Serial Telefonico"
+                        required v-if="paquete.id_tipo == 1">
                     </v-text-field>
 
                     <v-text-field v-model="paquete.descripcion" :rules="campoRules" label="Descripción" required>
@@ -56,7 +54,7 @@
 
             </v-card-text>
             <div justify="center">
-                <v-toolbar dark prominent color="#c8e4c2" elevation="7">
+                <v-toolbar dark prominent color="#8BC34A " elevation="7">
                     <v-toolbar-title class="t">Listado de Dispositivos</v-toolbar-title>
 
                     <v-spacer></v-spacer>
@@ -76,16 +74,19 @@
                     <v-card>
                         <v-card-text>
                             <v-form ref="formEditar" lazy-validation>
-                                 <v-select v-model="paqueteEditar.id_tipo" :items="tipoDB" item-text="tipo"
-                                                                    item-value="id" :rules="campoRules" label="Tipo" required>
-                                 </v-select>
+                                <v-select v-model="paqueteEditar.id_tipo" :items="tipoDB" item-text="tipo"
+                                    item-value="id" :rules="campoRules" label="Tipo" required>
+                                </v-select>
                                 <v-text-field v-model="paqueteEditar.serial" :counter="10" :rules="campoRules"
                                     label="Serial" required>
+                                </v-text-field>
+                                <v-text-field v-model="paqueteEditar.serialtelefonico" :counter="10" :rules="campoRules"
+                                    label="Serial Telefonico" required>
                                 </v-text-field>
                                 <v-text-field v-model="paqueteEditar.descripcion" :counter="10" :rules="campoRules"
                                     label="Descripcion" required>
                                 </v-text-field>
-                               
+
                                 <v-select v-model="paqueteEditar.id_estado" :items="estadosDb" item-text="estado"
                                     item-value="id" :rules="campoRules" label="Estado" required>
                                 </v-select>
@@ -99,6 +100,55 @@
                     </v-card>
                 </v-dialog>
             </div>
+            <v-dialog v-model="dialogoEquipoRegistrado" max-width="500px">
+                <v-card>
+                    <v-card-title class="headline">Equipo Registrado</v-card-title>
+                    <v-card-text>
+                        ¡El equipo se ha registrado correctamente!
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="sucess" @click="dialogoEquipoRegistrado = false">Aceptar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+
+            <v-dialog v-model="dialogoEliminar" max-width="500px">
+                <v-card>
+                    <v-card-title class="headline">Confirmar eliminación</v-card-title>
+                    <v-card-text>
+                        ¿Estás seguro de que quieres eliminar este equipo?
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="#057E28" text @click="eliminarEquipo">Confirmar</v-btn>
+                        <v-btn color="#057E28" text @click="dialogoEliminar = false">Eliminar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialogoExito" max-width="500px">
+                <v-card>
+                    <v-card-title >Éxito</v-card-title>
+                    <v-card-text>
+                        El archivo se ha cargado correctamente.
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="sucess" @click="dialogoExito = false">Aceptar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialogoError" max-width="500px">
+                <v-card>
+                    <v-card-title >Error</v-card-title>
+                    <v-card-text>
+                        Ha ocurrido un error al cargar el archivo. Por favor, inténtelo de nuevo.
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="sucess" @click="dialogoError = false">Aceptar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-card>
     </v-row>
 </template>
@@ -106,17 +156,21 @@
 import axios from "axios";
 export default {
     data: () => ({
+        dialogoEquipoRegistrado: false,
         dialogoEditar: false,
+        dialogoEliminar: false,
+        idEquipoEliminar: null,
+        dialogoExito: false,
+        dialogoError: false,
         valid: true,
-
         campoRules: [(v) => !!v || "Campo Requerido"],
 
         paquete: {
             id: null,
             serial: null,
-            serialTelefonico: null,
+            serialtelefonico: null,
             descripcion: null,
-            id_estado: null,
+            id_estado: 1,
             id_tipo: null,
         },
         return: {
@@ -134,22 +188,23 @@ export default {
         paqueteEditar: {
             id: null,
             serial: null,
+            serialtelefonico: null,
             descripcion: null,
-            id_estado: 1,
+            id_estado: null,
             id_tipo: null,
         },
         headers: [
             { text: "Id", value: "id" },
-             { text: "Tipo", value: "id_tipo.tipo" },
+            { text: "Tipo", value: "id_tipo.tipo" },
             { text: "Serial", value: "serial" },
-             { text: "Serial Telefonico", value: "serialTelefonico" },
+            { text: "Serial Telefonico", value: "serialtelefonico" },
             {
                 text: "Descripcion",
                 align: "start",
                 sortable: false,
                 value: "descripcion",
             },
-           
+
             { text: "Estado", value: "id_estado.estado" },
             { text: 'Actions', value: 'actions', sortable: false },
 
@@ -164,14 +219,11 @@ export default {
                 axios
                     .post("http://localhost:3000/equipo/crear", this.paquete)
                     .then(function (response) {
-
-                        alert("guardado");
+                        vm.dialogoEquipoRegistrado = true;
                         console.log(response)
                         vm.cargar()
-
                     })
                     .catch(function (error) {
-                        // handle error
                         alert(error);
                         console.log(error);
                     })
@@ -179,28 +231,23 @@ export default {
                         vm.$refs.form.reset();
                     });
             }
-
         },
         uploadFile() {
-            if (this.file) {
-                const formData = new FormData();
-                formData.append('file', this.file);
-
-                // Aquí enviarías la solicitud al servidor para procesar el archivo Excel
-                // Reemplaza 'uploadTeams' con la ruta de tu endpoint para crear equipos
-                axios.post('http://localhost:3000/equipo/crearUpload', formData).then(response => {
-                    // Manejar la respuesta del servidor, como mostrar un mensaje de éxito
-                    console.log('Equipos creados exitosamente:', response.data);
-                }).catch(error => {
-                    // Manejar el error, como mostrar un mensaje de error al usuario
-                    console.error('Error al cargar el archivo:', error);
-                });
-            }
-        },
-
-
-
-
+      if (this.file) {
+        const formData = new FormData();
+        formData.append('file', this.file);
+        // Envía la solicitud al servidor para procesar el archivo Excel
+        axios.post('http://localhost:3000/equipo/crearUpload', formData)
+          .then(response => {
+            this.dialogoExito = true;
+            console.log('Equipos creados exitosamente:', response.data);
+          })
+          .catch(error => {
+            this.dialogoError = true;
+            console.error('Error al cargar el archivo:', error);
+          });
+      }
+    },
         async listarEstados() {
             await axios.get('http://localhost:3000/estado-equipo/').then(resp => {
                 this.estadosDb = resp.data;
@@ -246,12 +293,21 @@ export default {
         },
 
         async deleteItem(id) {
-            alert(id);
-            await axios.delete('http://localhost:3000/equipo/' + id).then(response => {
-                console.log(response.data);
-                this.cargar();
-
-            })
+            this.idEquipoEliminar = id;
+            this.dialogoEliminar = true;
+        },
+        eliminarEquipo() {
+            axios.delete('http://localhost:3000/equipo/' + this.idEquipoEliminar)
+                .then(response => {
+                    console.log(response.data);
+                    this.cargar();
+                })
+                .catch(error => {
+                    console.error('Error al eliminar el equipo:', error);
+                })
+                .finally(() => {
+                    this.dialogoEliminar = false;
+                });
         },
         async editarEquipo() {
             try {

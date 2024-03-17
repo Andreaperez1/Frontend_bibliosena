@@ -19,7 +19,7 @@
                 <v-text-field v-model="paquete.contrasena" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" :rules="[rules2.required, rules2.min]" @click:append="show1 = !show1" label="Contrasena" required></v-text-field>
                 <v-select v-model="paquete.id_rol" :items="rolDb" item-text="descripcion" item-value="id" :rules="campoRules" label="Rol" required></v-select>
                 <div class="button">
-                  <v-btn color="success" class="mr-8 lighten-2" @click="guardar" small>Guardar</v-btn>
+                  <v-btn color="#1B9F4E" class="mr-8 lighten-2" @click="guardar" small>Guardar</v-btn>
                 </div>
               </v-form>
             </v-card-text>

@@ -30,7 +30,7 @@
         </v-row>
 
         <div>
-            <v-toolbar  height="90px" dark prominent style="background-color: #a2ec92" elevation="7">
+            <v-toolbar  height="90px" dark prominent style="background-color: #8BC34A" elevation="7">
             <v-toolbar-title class=" text-center color-text">Listado de Tipo Equipo</v-toolbar-title>
             <v-spacer></v-spacer>
         </v-toolbar>
@@ -66,7 +66,7 @@
         <v-card>
           <v-card-title class="headline">Tipo Equipo Guardado</v-card-title>
           <v-card-text>
-            La operación se completó con éxito.
+            Tipo de equipo guardado con exito.
           </v-card-text>
           <v-card-actions>
             <v-btn color="success" text @click="dialogoExito = false">Aceptar</v-btn>
@@ -74,8 +74,19 @@
         </v-card>
       </v-dialog>
     </v-card>
-    </v-row> 
+
    
+    <v-dialog v-model="dialogoEliminarTipo" max-width="500px" class="d-flex align-center justify-center">
+  <v-card class="custom-card mx-auto" style="border: 4px">
+    <v-card-title class="headline text-center">Eliminar Tipo Equipo</v-card-title>
+    <v-card-text class="v-card__text">¿Estás seguro de que quieres eliminar este tipo de equipo?</v-card-text>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" text @click="confirmarEliminarTipo" class="eliminar-button">Eliminar</v-btn>
+      <v-btn color="success" text @click="dialogoEliminarTipo = false" class="cancelar-button">Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+    </v-row>
 </template>
   
 <script>
@@ -83,8 +94,10 @@ import axios from "axios";
 export default {
     data: () => ({
         dialogoEditar: false,
+        dialogoExito:false,
+        dialogoEliminarTipo: false,
+        idTipoEliminar: null, 
         valid: true,
-
         campoRules: [(v) => !!v || "Campo Requerido"],
 
         paquete: {
@@ -136,16 +149,13 @@ export default {
             await axios
                 .get("http://localhost:3000/tipo-equipo/")
                 .then(function (response) {
-                    // handle success
                     vm.datos = response.data;
                     console.log(vm.datos);
                 })
                 .catch(function (error) {
-                    // handle error
                     console.log(error);
                 })
                 .finally(function () {
-                    // always executed
                 });
 
 
@@ -161,15 +171,20 @@ export default {
             
 
             },
-                        
-         async deleteItem(id) {
-            alert(id);
-            await axios.delete('http://localhost:3000/tipo-equipo/' + id).then(response => {
-                console.log(response.data);
-                this.cargar();
-            
-            })
-        },
+            async deleteItem(id) {
+        this.idTipoEliminar = id;
+        this.dialogoEliminarTipo = true;
+    },
+    async confirmarEliminarTipo() {
+    if (this.idTipoEliminar) {
+        await axios.delete('http://localhost:3000/tipo-equipo/' + this.idTipoEliminar).then(response => {
+            console.log(response.data);
+            this.cargar();
+        });
+        this.dialogoEliminarTipo = false;
+    }
+},
+
         async editarTipo() {
             try {
                 await axios.put('http://localhost:3000/tipo-equipo/actualizar',this.paqueteEditar).then(() => {

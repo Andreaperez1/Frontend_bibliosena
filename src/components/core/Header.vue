@@ -54,7 +54,7 @@
     data() {
       return {
         items: [
-        { text: 'Perfil', icon: 'mdi-clock', link:"/dashboard/salir"   },
+        { text: 'Perfil', icon: 'mdi-clock', link:""   },
         { text: 'Salir', icon: 'mdi-account', link:"/dashboard/salir" },
       ],
       }

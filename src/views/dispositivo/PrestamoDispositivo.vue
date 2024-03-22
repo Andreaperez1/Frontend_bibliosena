@@ -89,57 +89,67 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-btn height="35px" width="120px"  color="aliceblue" style="color: #508d42 ;font-size: 18px" class="mr-12 lighten-2" @click="Prestar" small>
-    Prestar
-  </v-btn>
+
         <br>
         <template>
           <!--tabla de prestamos-->
           <center>
             <v-simple-table class="tabla">
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-center">Tipo de equipo</th>
-          <th class="text-center">Cantidad</th>
-          <th class="text-right">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in paquete.detalleprestamo" :key="index">
-          <td class="text-center">
-            <template v-if="editIndex !== index">
-              {{ getDescripcionTipo(item.id_tipo) }}
-            </template>
-            <template v-else>
-              <v-select v-model="editedItem.id_tipo" :items="tipo_equipo" item-text="tipo" item-value="id" label="Tipo de equipo"></v-select>
-            </template>
-          </td>
-          <td class="text-center">
-            <template v-if="editIndex !== index">
-              {{ item.cantidad }}
-            </template>
-            <template v-else>
-              <v-text-field v-model="editedItem.cantidad" type="number" label="Cantidad de equipo"></v-text-field>
-            </template>
-          </td>
-          <td class="text-right">
-            <v-icon small @click="editIndex !== index ? editar(index) : guardarEdicion()"> mdi-pencil </v-icon>
-            <v-icon small @click="borrar(index)"> mdi-delete </v-icon> 
-          </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-center">Tipo de equipo</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in paquete.detalleprestamo" :key="index">
+                    <td class="text-center">
+                      <template v-if="editIndex !== index">
+                        {{ getDescripcionTipo(item.id_tipo) }}
+                      </template>
+                      <template v-else>
+                        <v-select v-model="editedItem.id_tipo" :items="tipo_equipo" item-text="tipo" item-value="id"
+                          label="Tipo de equipo"></v-select>
+                      </template>
+                    </td>
+                    <td class="text-center">
+                      <template v-if="editIndex !== index">
+                        {{ item.cantidad }}
+                      </template>
+                      <template v-else>
+                        <v-text-field v-model="editedItem.cantidad" type="number"
+                          label="Cantidad de equipo"></v-text-field>
+                      </template>
+                    </td>
+                    <td class="text-right">
+                      <v-icon small @click="editIndex !== index ? editar(index) : guardarEdicion()"> mdi-pencil
+                      </v-icon>
+                      <v-icon small @click="borrar(index)"> mdi-delete </v-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+
+            </v-simple-table>
           </center>
         </template>
         <br>
         <br>
 
       </v-card>
+      <center>
+        <br>
+        <v-btn height="35px" width="120px" justify="center" color=" aliceblue" style="color: #508d42 ;font-size: 18px"
+          class="mr-12 lighten-2" @click="Prestar" small>
+          Prestar
+        </v-btn>
+      </center>
 
-     
- 
+
+
+
       <v-dialog v-model="showDialog" max-width="400">
         <v-card>
           <v-card-title>Advertencia</v-card-title>
@@ -180,56 +190,72 @@
       </v-dialog>
 
       <v-dialog v-model="dialogoNoEquipos" max-width="500px">
-  <v-card>
-    <v-card-title class="headline text-center">No hay equipos disponibles</v-card-title>
-    <v-card-actions class="d-flex justify-center">
-      <v-btn color="success" @click="dialogoNoEquipos = false">Aceptar</v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
+        <v-card>
+          <v-card-title class="headline text-center">No hay equipos disponibles</v-card-title>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="success" @click="dialogoNoEquipos = false">Aceptar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-<v-dialog v-model="dialogoConfirmacionPrestamo" max-width="500px">
-  <v-card>
-    <v-card-title class="headline text-center">Confirmación de préstamo</v-card-title>
-    <v-card-text class="text-center">
+      <v-dialog v-model="dialogoConfirmacionPrestamo" max-width="500px">
+        <v-card>
+          <v-card-title class="headline text-center">Confirmación de préstamo</v-card-title>
+          <v-card-text class="text-center">
             Su prestamo ha sido exitoso.
           </v-card-text>
-    <v-card-actions class="d-flex justify-center">
-      <v-btn color="success" @click="dialogoConfirmacionPrestamo = false">Aceptar</v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="success" @click="dialogoConfirmacionPrestamo = false">Aceptar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-<v-dialog v-model="dialogoPrestamoExitoso" max-width="500px">
-  <v-card>
-    <v-card-title class="headline text-center">Préstamo exitoso</v-card-title>
-    <v-card-actions class="d-flex justify-center">
-      <v-btn color="success" @click="dialogoPrestamoExitoso = false">Aceptar</v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
+      <v-dialog v-model="dialogoPrestamoExitoso" max-width="500px">
+        <v-card>
+          <v-card-title class="headline text-center">Préstamo exitoso</v-card-title>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="success" @click="dialogoPrestamoExitoso = false">Aceptar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-<v-dialog v-model="dialogoRegistrePrimero" max-width="500px">
-  <v-card>
-    <v-card-title class="headline text-center">Registre primero el préstamo</v-card-title>
-    <v-card-actions class="d-flex justify-center">
-      <v-btn color="success" @click="dialogoRegistrePrimero = false">Aceptar</v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
+      <v-dialog v-model="dialogoRegistrePrimero" max-width="500px">
+        <v-card>
+          <v-card-title class="headline text-center">Registre primero el préstamo</v-card-title>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="success" @click="dialogoRegistrePrimero = false">Aceptar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-<v-dialog v-model="dialogoFechaDevolucion" max-width="500px">
+     <!-- Diálogo para fecha de préstamo menor que la fecha actual -->
+<v-dialog v-model="dialogoFechaPrestamoInvalida" max-width="500px">
   <v-card>
     <v-card-title class="headline text-center">Error</v-card-title>
     <v-card-text class="text-center">
-      La fecha de devolución no puede ser menor que la fecha del prestamo.
+      La fecha de préstamo no puede ser menor que la fecha actual.
     </v-card-text>
     <v-card-actions class="d-flex justify-center">
-      <v-btn color="success" @click="dialogoFechaDevolucion = false">Aceptar</v-btn>
+      <v-btn color="success" @click="dialogoFechaPrestamoInvalida = false">Aceptar</v-btn>
     </v-card-actions>
   </v-card>
 </v-dialog>
 
+<!-- Diálogo para fecha de devolución menor que la fecha de préstamo -->
+<v-dialog v-model="dialogoFechaDevolucionInvalida" max-width="500px">
+  <v-card>
+    <v-card-title class="headline text-center">Error</v-card-title>
+    <v-card-text class="text-center">
+      La fecha de devolución no puede ser menor que la fecha de préstamo.
+    </v-card-text>
+    <v-card-actions class="d-flex justify-center">
+      <v-btn color="success" @click="dialogoFechaDevolucionInvalida = false">Aceptar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+
+      
     </v-container>
   </v-row>
 </template>
@@ -260,15 +286,17 @@ export default {
     dialog2: false,
     search: "",
     showDialog: false,
+    dialogoFechaPrestamoInvalida: false,
+  dialogoFechaDevolucionInvalida: false,
     dialogoConfirmacionBorrado: false,
     indexBorrado: null,
     dialogoNoEquipos: false,
-    dialogoFechaDevolucion:false,
-  dialogoConfirmacionPrestamo: false,
-  dialogoPrestamoExitoso: false,
-  dialogoRegistrePrimero: false,
-  editIndex: -1,
-      editedItem: { id_tipo: null, cantidad: null },
+    dialogoFechaDevolucion: false,
+    dialogoConfirmacionPrestamo: false,
+    dialogoPrestamoExitoso: false,
+    dialogoRegistrePrimero: false,
+    editIndex: -1,
+    editedItem: { id_tipo: null, cantidad: null },
     dialogoEliminarDetalle: false,
     paqueteEditar: {
       id: null,
@@ -383,18 +411,18 @@ export default {
           vm.$refs.form.reset();
         });
     },
-      guardar() {
-  if (
-    this.$refs.form.validate() &&
-    this.detalleprestamo.id_tipo != null &&
-    this.detalleprestamo.cantidad != null
-  ) {
-    this.paquete.detalleprestamo.push({ ...this.detalleprestamo });
-    this.detalleprestamo = { id_tipo: null, cantidad: null };
-  } else {
-    this.showDialog = true;
-  }
-},
+    guardar() {
+      if (
+        this.$refs.form.validate() &&
+        this.detalleprestamo.id_tipo != null &&
+        this.detalleprestamo.cantidad != null
+      ) {
+        this.paquete.detalleprestamo.push({ ...this.detalleprestamo });
+        this.detalleprestamo = { id_tipo: null, cantidad: null };
+      } else {
+        this.showDialog = true;
+      }
+    },
 
     borrar(index) {
       this.indexBorrado = index;
@@ -408,39 +436,45 @@ export default {
     Prestar() {
   var vm = this;
   this.paquete.cedula = this.$store.getters.getCedula;
-  const fechaPrestamo = new Date();
+  const fechaActual = new Date();
+  const fechaPrestamo = new Date(this.paquete.fecha_prestamo);
   const fechaDevolucion = new Date(this.paquete.fecha_devolucion);
 
-  if (fechaDevolucion < fechaPrestamo) {
-    this.dialogoFechaDevolucion = true; 
+  if (fechaPrestamo.getTime() < fechaActual.getTime()) {
+    vm.dialogoFechaPrestamoInvalida = true;
     return;
   }
 
-  if (this.$refs.form.validate()) {
-    axios
-      .post(`http://localhost:3000/prestamo/crear`, this.paquete)
-      .then((response) => {
-        vm.cargar();
-        console.log(response);
-        if (response.data.respuesta === "No hay ningun equipo disponible") {
-          vm.dialogoNoEquipos = true;
-        } else {
-          if (response.data.numero > 0) {
-            vm.objConfimacion.numero = response.data.numero;
-            vm.confirmacion = true;
-          } else {
-            vm.dialogoPrestamoExitoso = true;
-          }
-        }
-      })
-      .catch(function (error) {
-        alert(error);
-        console.log(error);
-      });
-  } else {
-    vm.dialogoRegistrePrimero = true;
+  if (fechaDevolucion.getTime() < fechaPrestamo.getTime()) {
+    vm.dialogoFechaDevolucionInvalida = true;
+    return;
   }
-},
+
+      if (this.$refs.form.validate()) {
+        axios
+          .post("http://localhost:3000/prestamo/crear", this.paquete)
+          .then((response) => {
+            vm.cargar();
+            console.log(response);
+            if (response.data.respuesta === "No hay ningun equipo disponible") {
+              vm.dialogoNoEquipos = true;
+            } else {
+              if (response.data.numero > 0) {
+                vm.objConfimacion.numero = response.data.numero;
+                vm.confirmacion = true;
+              } else {
+                vm.dialogoPrestamoExitoso = true;
+              }
+            }
+          })
+          .catch(function (error) {
+            alert(error);
+            console.log(error);
+          });
+      } else {
+        vm.dialogoRegistrePrimero = true;
+      }
+    },
     eliminarDetalle() {
       var vm = this;
       axios
@@ -474,7 +508,7 @@ export default {
       })
     },
 
-    
+
     editar(index) {
       this.editIndex = index;
       this.editedItem = { ...this.paquete.detalleprestamo[index] };
@@ -494,8 +528,8 @@ export default {
       }
     },
     cancelDateRange() {
-    this.showDatePickerDialog = false;
-  },
+      this.showDatePickerDialog = false;
+    },
     async cargar() {
       var vm = this
       this.listarusuario();
@@ -524,7 +558,7 @@ export default {
         this.cargar();
 
       })
-  
+
     }, reset() {
       this.$refs.form.reset();
     },
